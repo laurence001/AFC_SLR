@@ -1,5 +1,6 @@
 library(textmineR)
 library(tidyverse)
+library(factoextra)
 
 corpus <- as.data.frame(main_corpus)
 colnames(corpus) <- c("Code",	"Title","Abstract","Field","Type","Year","Journalism","Use","Citations","APA")
@@ -65,6 +66,8 @@ cluster_summary <- data.frame(cluster = unique(clustering),
 
 cluster_summary
 
+formattable(cluster_summary)
+
 wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 
                      freq = cluster_words[[ 5 ]], 
                      max.words = 200, 
@@ -84,6 +87,9 @@ plot(hclust_avg)
 cut_avg <- cutree(hclust_avg, k = 3)
 
 plot(hclust_avg)
+
+
+
 rect.hclust(hclust_avg , k = 3, border = 2:6)
 abline(h = 3, col = 'red')
 
@@ -123,3 +129,15 @@ circlize_dendrogram(hc,
                     dend_track_height = 0.5)  
 
 plot(as.phylo(hc), type = "radial")
+
+#KMEANS CLUSTERING
+
+kmeans6 <- kmeans(DTM, 6)
+kmeans6$betweenss
+d <- DTM[["dimnames"]][["Terms"]]
+kw_with_cluster <- as.data.frame(d, kmeans6$cluster)
+names(kw_with_cluster) <- c("Terms", "kmeans6")
+
+str(kmeans6)
+
+fviz_cluster(kmeans6, data = DTM)
