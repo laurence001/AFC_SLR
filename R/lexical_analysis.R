@@ -6,6 +6,7 @@ library(highcharter)
 library(tidytext)
 library(tidyverse)
 
+corpus <- as.data.frame(main_corpus)
 abstracts <- as.data.frame(corpus$Abstract)
 
 colnames(abstracts) <- "txt"
@@ -111,6 +112,11 @@ df <- data.frame(word = names(words),freq=words)
 set.seed(1234)
 wordcloud(words = df$word, freq = df$freq, min.freq = 10, max.words = 50, random.order=TRUE, colors = c("#2f4858","#185969","#006a7a","#2c8491","#ffcd02","#ffda41"))
 
+library("wordcloud2")
+
+set.seed(1234)
+wordcloud2(data = myfrequencies,color = c("#2F4858","#B8E6E2"))
+
 #QUANTEDA
 
 library(quanteda)
@@ -139,7 +145,3 @@ formattable(myfrequencies)
 #Textplot Network
 sim <- textstat_proxy(mydfm, margin = "features")
 textplot_network(quanteda:::as.fcm(as(sim, "dgTMatrix")), min_freq = 0.97)
-
-#WordCloud
-textplot_wordcloud(mydfm)
-textplot_wordcloud(mydfm,min_count = 10)
